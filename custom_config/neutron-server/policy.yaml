@@ -1,0 +1,3 @@
+"create_network:router:external": "rule:regular_user"
+"update_network:router:external": "rule:regular_user"
+"update_router": "rule:regular_user"

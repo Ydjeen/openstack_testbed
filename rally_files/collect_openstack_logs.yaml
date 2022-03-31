@@ -1,0 +1,16 @@
+---
+- hosts: control, monitoring, compute
+  tasks:
+    - name: Create a directory
+      file:
+        path: "{{inventory_dir}}/openstack_logs/{{inventory_hostname}}"
+        state: directory
+        mode: 0777
+        recurse: yes
+      become: no
+      delegate_to: localhost
+    - name: Download openstack logs
+      synchronize:
+        mode: pull
+        src: "/var/log/kolla/"
+        dest: "{{inventory_dir}}/openstack_logs/{{inventory_hostname}}"

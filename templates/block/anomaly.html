@@ -1,0 +1,30 @@
+<style>
+#anomaly_text { float:left;}
+</style>
+
+<div>
+    <div>
+        <label for="lname">Duration in seconds</label>
+        <input type="text" id="lname" name="duration" value="60"><br><br>
+        <label for="lname">Concurrency</label>
+        <input type="text" id="lname" name="concurrency" value="1"><br><br>
+    </div>
+    <div>
+        <label for="listAnomalies">List of anomalies</label>
+        <ol id="compute_list">
+            <li>
+                <div id="anomaly_text">
+                    <textarea cols = 50>
+                        hello
+                    </textarea>
+                </div>
+
+                <div>
+                    <button>remove anomaly</button>
+                </div>
+            </li>
+        </ol>
+        <button onclick="appendAnomaly()">Add anomaly</button>
+    </div>
+    <button onclick="scheduleExperiment()">Schedule Experiment</button>
+</div>

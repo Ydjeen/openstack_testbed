@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<a href={{ url_for('configs.new_config') }} class="btn,btn-primary">Deploy new configruration</a>
+<p></p>
+{% for config in config_list %}
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    {# {% include "block/config_button.html" %} #}
+                    <button  type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collaps_config{{ config.id }}">Config {{ config.id }}</button>
+                </h4>
+            </div>
+                    <button onclick="goTo('',{{ config.id }})">Open</button>
+                {% if config.get_current_request() %}
+                    Current action: {{ config.get_current_request().request_type }}
+                {% endif %}
+                {% if config.get_scheduled_requests()%}
+                    Scheduled actions:
+                    {% for requested_action in config.get_scheduled_requests() %}
+                        {{ requested_action.request_type }}
+                    {% endfor %}
+                {% endif %}
+
+        </div>
+    </div>
+
+{% endfor %}
+
+<script>
+    function showLog(config_id, log_file){
+        window.location.href = '/configs/' + config_id + '/log/' + log_file
+    }
+</script>
+{% endblock %}

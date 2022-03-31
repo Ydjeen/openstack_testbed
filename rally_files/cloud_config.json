@@ -1,0 +1,9 @@
+{
+  "ansible": {
+    "ansible_user": "yevhen",
+    "private_key_file": "~/.ssh/id_rsa"
+  },
+  "hosts": [
+    "wally096.cit.tu-berlin.de"
+  ]
+}

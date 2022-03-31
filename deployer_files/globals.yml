@@ -1,0 +1,36 @@
+---
+
+kolla_base_distro: "ubuntu"
+node_custom_config: "/etc/kolla/config"
+kolla_internal_vip_address: "[control_ip]"
+network_interface: "enp2s0"
+neutron_external_interface: "eno1"
+enable_haproxy: "no"
+enable_central_logging: "yes"
+enable_osprofiler: "yes"
+enable_prometheus: "yes"
+enable_cinder: "yes"
+enable_cinder_backend_lvm: "yes"
+
+################################
+# Cinder - Block Storage Options
+################################
+# Enable / disable Cinder backends
+#cinder_backend_ceph: "{{ enable_ceph }}"
+#cinder_backend_vmwarevc_vmdk: "no"
+#cinder_volume_group: "cinder-volumes"
+# Valid options are [ '', redis, etcd ]
+#cinder_coordination_backend: "{{ 'redis' if enable_redis|bool else 'etcd' if enable_etcd|bool else '' }}"
+
+# Valid options are [ nfs, swift, ceph ]
+#cinder_backup_driver: "ceph"
+#cinder_backup_share: ""
+#cinder_backup_mount_options_nfs: ""
+
+enable_prometheus_haproxy_exporter: "no"
+enable_prometheus_mysqld_exporter: "no"
+enable_prometheus_memcached: "no"
+enable_prometheus_alertmanager: "no"
+enable_prometheus_openstack_exporter: "no"
+enable_prometheus_elasticsearch_exporter: "no"
+enable_prometheus_blackbox_exporter: "no"

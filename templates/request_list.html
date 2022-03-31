@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block header %}
+  <h1>{% block title %}List of requests for deployment {{ deploy_id }}{% endblock %}</h1>
+{% endblock %}
+{% block content %}
+<style>
+* {
+box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+float: left;
+width: 50%;
+padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+content: "";
+display: table;
+clear: both;
+}
+</style>
+    <li>
+    {% for request in request_list%}
+                        <div class="row">
+                            <div class="column">
+                                id : {{request.id}}, deployment id : {{ request.deploy_id }},
+                                    request type : <b>{{ request.request_type }}</b><br>
+                                requested at : {{ request.request_time }} <br>
+                                request started at : {{ request.request_start }} <br>
+                                request done at : {{ request.request_end }} <br>
+                            </div>
+                            <div class="column">
+                                {% if request.request_type == request.REQUEST_DEPLOY%}
+                                    <button onclick="location.href='deploy_log'">log</button>
+                                {% endif %}
+                                {% if request.request_type == request.REQUEST_LOAD%}
+                                    <button onclick="location.href='experiment/{{ request.id }}/'">Results</button>
+                                    <button onclick="location.href='experiment/{{ request.id }}/html_report'">Html report</button>
+                                    {% if request.is_done() %}
+                                        <button onclick="location.href='experiment/{{ request.id }}/full_dump'">Full dump</button>
+                                    {% endif %}
+                                    <button onclick="location.href='experiment/{{ request.id }}/repeat'">Repeat</button>
+                                {% endif %}
+                                {% if request.is_done() %}
+                                    {#
+                                        {% if request.request_type == request.REQUEST_LOAD%}
+                                            <button onclick="location.href='load/{{ request.id }}/report_html'">html report</button>
+                                            <button onclick="location.href='load/{{ request.id }}/report_json'">json report</button>
+                                        {% endif %}
+                                    #}
+                                {% endif %}
+                            </div>
+                        </div>
+    {% endfor %}
+    </li>
+{% endblock %}

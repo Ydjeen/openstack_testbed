@@ -1,0 +1,47 @@
+---
+  ScenarioPlugin.complete_test_run:
+    -
+      args:
+        image_location: "http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img"
+        container_format: "bare"
+        disk_format: "qcow2"
+        network_create_args: {}
+      runner:
+        type: "constant_for_duration"
+        concurrency: 1
+        duration: 10
+        timeout: 300
+      hooks:
+        - name: sys_call
+          description: Anomaly
+          args: chaos admin node list
+          trigger:
+            name: event
+            args:
+              unit: iteration
+              at: [ 1 ]
+---
+  ScenarioPlugin.CreateAndDeleteNetworkAndServer:
+    -
+      args:
+        flavor:
+          name: "m1.tiny"
+        image:
+          name: "default_image"
+        container_format: "bare"
+        disk_format: "qcow2"
+        network_create_args: {}
+      runner:
+        type: "constant_for_duration"
+        concurrency: 1
+        duration: 10
+        timeout: 300
+      hooks:
+        - name: sys_call
+          description: Anomaly
+          args: chaos admin node list
+          trigger:
+            name: event
+            args:
+              unit: iteration
+              at: [ 1 ]

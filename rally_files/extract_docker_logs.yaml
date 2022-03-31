@@ -1,0 +1,23 @@
+---
+- hosts: control:compute
+  tasks:
+    - shell: docker ps | awk 'FNR > 1 {print $NF}'
+      register: docker_containers
+    - name: test
+      debug: "{{inventory_dir}}"
+    - command: docker logs --timestamps --details "{{item}}"
+      register: docker_logs
+      loop: "{{ docker_containers.stdout_lines }}"
+    - name: Create a directory
+      file:
+        path: "{{inventory_dir}}/docker_logs/{{inventory_hostname}}"
+        state: directory
+      become: no
+      delegate_to: localhost
+    - name: copy output to file
+      copy:
+        content: "{{ item['stderr'] }}"
+        dest: "{{inventory_dir}}/docker_logs/{{inventory_hostname}}/{{item['item']}}.txt"
+      delegate_to: localhost
+      become: no
+      loop: "{{docker_logs['results']}}"

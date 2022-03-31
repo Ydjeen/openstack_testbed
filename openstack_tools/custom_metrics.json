@@ -1,0 +1,22 @@
+{
+  "node_network_receive_bytes_enp2s0": "rate(node_network_receive_bytes_total{device=\"enp2s0\"}[40s])",
+  "node_network_receive_bytes_lo": "rate(node_network_receive_bytes_total{device=\"lo\"}[40s])",
+  "node_network_transmit_bytes_enp2s0": "rate(node_network_transmit_bytes_total{device=\"enp2s0\"}[40s])",
+  "node_network_transmit_bytes_lo": "rate(node_network_transmit_bytes_total{device=\"lo\"}[40s])",
+  "node_network_receive_packets_enp2s0": "rate(node_network_receive_packets_total{device=\"enp2s0\"}[40s])",
+  "node_network_receive_packets_lo": "rate(node_network_receive_packets_total{device=\"lo\"}[40s])",
+  "node_network_transmit_packets_enp2s0": "rate(node_network_transmit_packets_total{device=\"enp2s0\"}[40s])",
+  "node_network_transmit_packets_lo": "rate(node_network_transmit_packets_total{device=\"lo\"}[40s])",
+  "available_space": "100 - ((node_filesystem_avail_bytes{mountpoint=\"/\",fstype!=\"rootfs\"} * 100) /node_filesystem_size_bytes{mountpoint=\"/\",fstype!=\"rootfs\"})",
+  "node_disk_read_mb": "irate(node_disk_read_bytes_total[50s]) / 1024 / 1024",
+  "node_disk_write_mb": "irate(node_disk_write_bytes_total[50s]) / 1024 / 1024",
+  "node_disk_read_latency": "irate(node_disk_read_time_seconds_total[40s]) / irate(node_disk_reads_completed_total[40s])",
+  "node_disk_write_latency": "irate(node_disk_write_time_seconds_total[40s]) / irate(node_disk_writes_completed_total[40s])",
+  "node_disk_reads_completed": "irate(node_disk_reads_completed_total[40s])",
+  "node_disk_writes_completed": "irate(node_disk_writes_completed_total[40s])",
+  "node_disk_io_now": "rate(node_disk_io_now[40s])",
+  "node_cpu_utilisation_avg": "100 - (avg by (instance) (irate(node_cpu_seconds_total{job=\"node\",mode=\"idle\"}[40s])) * 100)",
+  "node_cpu_utilisation_min": "100 - (max by (instance) (irate(node_cpu_seconds_total{job=\"node\",mode=\"idle\"}[40s])) * 100)",
+  "node_cpu_utilisation_max": "100 - (min by (instance) (irate(node_cpu_seconds_total{job=\"node\",mode=\"idle\"}[40s])) * 100)",
+  "node_avg_memory": "100 * (1 - ((avg_over_time(node_memory_MemFree_bytes[40s])) / avg_over_time(node_memory_MemTotal_bytes[40s])))"
+}

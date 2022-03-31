@@ -1,0 +1,30 @@
+<div class="config_info">
+    <p>State : {{ config.state }}</p>
+    {% if not config.is_destroyed() %}
+        <p>Control : {{ config.get_control_node().name }}</p>
+        <p>Monitoring : {{ config.get_monitoring_node().name }}</p>
+        <p>Compute : {% for compute in config.get_compute_nodes() %}
+                            {{ compute.name }}
+                        <button onclick="location.href='node/{{ compute.name }}/restart'" type="button">Restart</button>
+                        {% endfor %}
+    {% endif %}
+    </p>
+
+    {% if config.get_current_request() %}
+                    Current action: <button onclick="location.href='requests/{{ config.get_current_request().get_id() }}'" type="button">
+                        {{config.get_current_request().request_type}}</button>
+                {% endif %}
+                {% if config.get_scheduled_requests()%}
+                    <li>
+                    Scheduled actions:
+                    {% for request in config.get_scheduled_requests() %}
+                        <div>
+                        <button onclick="location.href='requests/{{ request.get_id() }}'" type="button">
+                        {{request.request_type}}</button>
+                        <button onclick="location.href='requests/{{ request.get_id() }}/cancel'" type="button">
+                            Cancel</button>
+                        </div>
+                    {% endfor %}
+                    </li>
+    {% endif %}
+</div>

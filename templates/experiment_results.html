@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block header %}
+  <h1>{% block title %}List of requests for deployment {{ deploy_id }}{% endblock %}</h1>
+{% endblock %}
+{% block content %}
+<style>
+* {
+box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+float: left;
+width: 50%;
+padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+content: "";
+display: table;
+clear: both;
+}
+</style>
+    <li>
+    {% for result in results%}
+                        <div class="row">
+                            <div class="column">
+                                {{ result[0] }}
+                            </div>
+                            <div class="column">
+                                {% if result[1] %}
+                                    <button onclick="location.href='{{ result[0] }}/log'">log</button>
+                                {%  endif %}
+                                {% if result[2] %}
+                                    <button onclick="location.href='{{ result[0] }}/report_html'">html report</button>
+                                    <button onclick="location.href='{{ result[0] }}/report_json'">json report</button>
+                                {% endif %}
+                                {% if result[3] %}
+                                    <button onclick="location.href='{{ result[0] }}/error'">error</button>
+                                {% endif %}
+                            </div>
+                        </div>
+    {% endfor %}
+    </li>
+{% endblock %}

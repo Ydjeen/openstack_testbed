@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block header %}
+  <h1>{% block title %}Request a new experiment{% endblock %}</h1>
+{% endblock %}
+{% block content %}
+<br>
+<form action="/configs/{{deploy_id}}/request_experiment" id="experiment_form" method="post">
+    <div>
+    <label for="experiment_duration">Experiment duration</label>
+    <input type="text" id="experiment_duration" name="duration" value="1"><br><br>
+    <label for="experiment_duration">Use traces</label>
+    <input type="checkbox" id="use_traces" name="use_traces" unchecked><br><br>
+    <label for="title_workload">Workload</label>
+    <textarea id="source_workload" name="workload" rows="10" cols="120">
+---
+  ScenarioPlugin.complete_test_run:
+    -
+      args:
+        image_location: "http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img"
+        container_format: "bare"
+        disk_format: "qcow2"
+        network_create_args: {}
+      runner:
+        type: "constant_for_duration"
+        concurrency: {% raw %}{{ range(1, 3) | random }}{% endraw %}
+        duration: 5
+        timeout: 1000</textarea>
+    </div>
+    <div>
+        <label for="anomaly_list">List of anomalies</label>
+        <ol id="anomaly_list">
+        </ol>
+        <button type="button" onclick="appendAnomaly()">Add anomaly</button>
+    </div>
+    <input type="submit" value="Submit">
+</form>
+
+<script>
+
+    hookTemplate = HOOK_BASIC = "      hooks:\n" +
+        "        - name: fault_injection\n" +
+        "          description: Anomaly\n" +
+        "          args: chaos --config_file" +
+        " rally_files/cloud_config.json admin node list\n" +
+        "          trigger:\n" +
+        "            name: event\n" +
+        "            args:\n" +
+        "              unit: iteration\n" +
+        "              at: [ 1 ]\n"
+
+    hook_template_example =
+        "      hooks:\n" +
+        "        - name: fault_injection\n" +
+        "          args:\n" +
+        "            debug: true\n" +
+        "            target:\n" +
+        "              target: \"host\"\n" +
+        "              host: [random_node]\n" +
+        "            params:\n" +
+        "              delay: \"2s\"\n" +
+        "              duration: \"{% raw %}{{ range(10, 30) | random }}{% endraw %}s\"\n" +
+        "              stressors: \"--cpu 8\"\n" +
+        "            anomaly: \"stress-ng\"\n" +
+        "            config:\n" +
+        "              ansible:\n" +
+        "                ansible_python_interpreter: \"/usr/bin/python3\"\n" +
+        "                ansible_user: \"yevhen\"\n" +
+        "                private_key_file: \"~/.ssh/id_rsa\"\n" +
+        "              hosts: [node_list]\n" +
+        "          trigger:\n" +
+        "            name: event\n" +
+        "            args:\n" +
+        "              unit: iteration\n" +
+        "              at: [ 1 ]\n"
+    var counter = 0;
+
+    function appendAnomaly(value=undefined){
+        var selectCompute = document.getElementById("selectComputeNode");
+        var computeElement = document.createElement("LI");
+        var textNode = document.createElement('textarea');
+        if (value)
+            textNode.value = value
+        else
+            textNode.value = hook_template_example
+        textNode.setAttribute("white-space","nowrap")
+        textNode.setAttribute("cols", 50)
+        textNode.setAttribute("vertical-align", "top")
+        textNode.setAttribute("form", "experiment_form")
+        textNode.name = "anomaly"+counter
+        counter += 1
+        var anomaly_options = document.createElement('div')
+        var removeButton = document.createElement('button');
+        removeButton.innerHTML = '-';
+        computeElement.appendChild(textNode);
+        anomaly_options.appendChild(removeButton)
+        computeElement.appendChild(anomaly_options);
+        document.getElementById("anomaly_list").appendChild(computeElement);
+        removeButton.onclick = function(){
+            this.parentNode.parentNode.remove()
+        };
+    }
+
+    function onDurationChange(){
+        var durationNode = document.getElementById("experiment_duration")
+        duration = durationNode.value
+        var duration_iterations = new RegExp("^\d+$");
+        duration.find(duration_iterations)
+    }
+
+    function useExistingKwargs(kwargs){
+        if (!kwargs)
+            return;
+        document.getElementById('experiment_duration').value = kwargs['duration'];
+        if (kwargs['use_traces'])
+            if (kwargs['use_traces'] == 'on')
+                document.getElementById('use_traces').checked = true;
+        document.getElementById('source_workload').value = kwargs['workload'];
+        i = 0
+        while (kwargs['anomaly'+i]) {
+            appendAnomaly(kwargs['anomaly'+i])
+            i++;
+        }
+    }
+    useExistingKwargs({{ kwargs|safe }})
+</script>
+{% endblock %}

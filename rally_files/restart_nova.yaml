@@ -1,0 +1,6 @@
+---
+- hosts: control
+  tasks:
+    - shell: docker ps | awk 'FNR > 1 && $NF ~ /nova/ {print $NF}' | tr '\n' ' '
+      register: nova_containers
+    - command: docker restart {{nova_containers.stdout}}

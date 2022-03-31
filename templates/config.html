@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block header %}
+  <h1>{% block title %}Config {{ config.id }}{% endblock %}</h1>
+{% endblock %}
+{% block content %}
+{% include 'block/config_info.html' %}
+{% include 'block/config_actions.html' %}
+{% endblock %}

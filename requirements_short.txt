@@ -1,0 +1,10 @@
+ansible<2.10
+kolla-ansible==9.1.0
+rally-openstack
+flask
+flask_sqlalchemy
+flask_restful
+gunicorn
+pandas
+elasticsearch
+osprofiler

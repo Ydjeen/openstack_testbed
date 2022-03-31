@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block header %}
+  <h1>{% block title %}Register new configuration{% endblock %}</h1>
+{% endblock %}
+{% block content %}
+
+    <div>
+        <div>
+            <label for="selectControlNode">Choose a Control Node</label>
+            <select id="selectControlNode" name="Control Nodes" onchange="onComputeChange()">
+                <option value="-">-</option>
+                {% for node in nodes %}
+                    <option value="{{ node.name }}">{{ node.name }}</option>
+                {% endfor %}
+            </select>
+            <label for="selectMonitoringNode">Choose a Monitoring Node</label>
+            <select id="selectMonitoringNode" name="Monitoring Node" onchange="onComputeChange()">
+                <option value="-">-</option>
+                {% for node in nodes %}
+                    <option value="{{ node.name }}">{{ node.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="selectComputeNode">Add Compute Nodes</label>
+            <select id="selectComputeNode" name="Compute Nodes">
+                <option value="-">-</option>
+                {% for node in nodes %}
+                    <option value="{{ node.name }}">{{ node.name }}</option>
+                {% endfor %}
+            </select>
+            <button onclick="appendComputeNode()">+</button>
+            <ol id="compute_list">
+            </ol>
+        </div>
+        <button onclick="scheduleDeployment()">Schedule Deployment</button>
+    </div>
+
+    <script>
+
+        function onComputeChange(){
+            var computeElement = document.getElementById("selectControlNode")
+            var selectedID = computeElement.value
+        }
+
+        function addOption(selectId, option){
+            var selectElement = document.getElementById(selectId)
+            var optionCompute = document.createElement("option");
+            optionCompute.value = option;
+            optionCompute.text = option;
+            selectElement.add(optionCompute)
+        }
+
+        function appendComputeNode(){
+            var selectCompute = document.getElementById("selectComputeNode");
+            if (selectCompute.value === '-')
+                return
+            var computeElement = document.createElement("LI");
+            var textnode = document.createTextNode(selectCompute.value);
+            var removeButton = document.createElement('button');
+            removeButton.innerHTML = '-';
+            computeElement.appendChild(textnode);
+            computeElement.appendChild(removeButton);
+            document.getElementById("compute_list").appendChild(computeElement);
+            removeButton.onclick = function(){
+                var computeValue = this.parentElement.childNodes[0].nodeValue
+                addOption("selectComputeNode", computeValue)
+                this.parentNode.remove()
+            };
+            selectCompute.remove(selectCompute.selectedIndex);
+        }
+
+        function scheduleDeployment(){
+            var controlElement = document.getElementById("selectControlNode")
+            var monitoringElement = document.getElementById("selectMonitoringNode")
+            var computeElementList = document.getElementById("compute_list")
+            controlNode = controlElement.value
+            monitoringNode = monitoringElement.value
+            var computeNodes = [];
+            for (index = 1; index < computeElementList.childNodes.length; ++index) {
+                computeNodes.push(computeElementList.childNodes[index].childNodes[0].nodeValue)
+            }
+            if (controlNode === '-'){
+                alert("Wrong configuration. Control node has to be specified")
+                return
+            }
+            if (computeNodes.length === 0){
+                alert("Wrong configuration. Select at least one compute node")
+                return
+            }
+           /*if (computeNodes.includes(controlNode)){
+                alert("Wrong configuration. Control node is listed as a compute node.")
+                return
+            }*/
+            fetch('/configs/', {
+                method: 'POST',
+                body: JSON.stringify({"control": controlNode, "monitoring": monitoringNode, "compute": computeNodes}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+            .then(data => {
+                window.location.href = '/configs/' + data.deploy_id
+            })
+        }
+    </script>
+{% endblock %}

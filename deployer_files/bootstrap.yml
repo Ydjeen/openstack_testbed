@@ -1,0 +1,43 @@
+
+- hosts: control, monitoring, compute
+  become: true
+
+  tasks:
+  - name: Install needed  packages
+    package:
+      name: python3-pip, stress-ng, rsync
+      state: present
+
+  - name: Install tcconfig python package
+    pip:
+      name: tcconfig
+
+  - name: Install cgoup-bin  or cgroup-tools
+    block:
+      - name: Try to install cgroup-bin package
+        package:
+          name: cgroup-bin
+          state: present
+    rescue:
+      - name: Install cgroup-tools package
+        package:
+          name: cgroup-tools
+          state: present
+
+  - name: Download dockhack installer
+    get_url: url=https://raw.githubusercontent.com/tavisrudd/dockhack/master/dockhack dest=/usr/local/sbin/dockhack
+
+  - name: Making dockhack executable
+    file: dest=/usr/local/sbin/dockhack mode=a+x
+
+  - name: Execute the dockhack installation script
+    shell: dockhack install_deps
+
+  - name: replace
+    lineinfile:
+      path: /etc/hosts
+      regexp: '^127.0.1.1.*wally([0-9][0-9][0-9]).*'
+      firstmatch: yes
+      backup: yes
+      line: '127.0.0.1 wally\1'
+      backrefs: yes

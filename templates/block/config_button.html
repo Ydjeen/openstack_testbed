@@ -1,0 +1,37 @@
+<style>
+
+.config_button .config_hover_info {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+.config_button:hover .config_hover_info {
+  visibility: visible;
+}
+
+.config_button{
+    float:left;
+    margin-right:2%;
+}
+
+.config_info_block{
+    float:left;
+        margin-right:2%;
+}
+
+</style>
+<li>
+<button class="config_button" onclick="goTo('',{{ config.id }})">Config {{ config.id }}
+  <!-- <span class="config_hover_info">{% include 'block/config_info.html' %}</span> -->
+</button>
+<div class="config_info_block">{% include 'block/config_info.html' %}</div>
+</li>

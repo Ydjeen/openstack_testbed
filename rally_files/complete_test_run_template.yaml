@@ -1,0 +1,14 @@
+---
+  ScenarioPlugin.complete_test_run:
+    -
+      args:
+        image_location: "http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img"
+        container_format: "bare"
+        disk_format: "qcow2"
+        network_create_args: {}
+      runner:
+        type: "constant_for_duration"
+        concurrency: [concurrency]
+        duration: [duration]
+        timeout: 1000
+[hooks]

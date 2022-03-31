@@ -1,0 +1,13 @@
+.idea/
+__pycache__/
+venv/
+venv*/
+deploy_list/
+logs/
+node_modules/
+/cloud_info
+/cirros-0.3.4-x86_64-disk.img
+get-pip.py
+node_list
+db.db
+journal.json

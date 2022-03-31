@@ -1,0 +1,56 @@
+{% set flavor_name = flavor_name or "m1.tiny" %}
+---
+  NovaServers.boot_and_delete_server:
+    -
+      args:
+        flavor:
+            name: "m1.tiny"
+        image:
+            name: "^cirros.*-disk$"
+        force_delete: false
+      runner:
+        type: "constant"
+        times: 10
+        concurrency: 2
+      context:
+        users:
+          tenants: 3
+          users_per_tenant: 2
+      sla:
+        failure_rate:
+          max: 0
+    -
+      args:
+        flavor:
+            name: "m1.tiny"
+        image:
+            name: "^cirros.*-disk$"
+        auto_assign_nic: true
+      runner:
+        type: "constant"
+        times: 10
+        concurrency: 2
+      context:
+        users:
+          tenants: 3
+          users_per_tenant: 2
+        network:
+          start_cidr: "10.2.0.0/24"
+          networks_per_tenant: 2
+      sla:
+        failure_rate:
+          max: 0
+  HttpRequests.check_request:
+    -
+      args:
+        url: "http://www.example.com"
+        method: "GET"
+        status_code: 200
+        allow_redirects: False
+      runner:
+        type: "constant"
+        times: 20
+        concurrency: 5
+      sla:
+        failure_rate:
+          max: 0

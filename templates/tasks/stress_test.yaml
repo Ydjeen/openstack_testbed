@@ -1,0 +1,2 @@
+{% set flavor_name = flavor_name or "m1.tiny" %}
+{% set flavor_name = flavor_name or "m1.tiny" %}

@@ -1,0 +1,6 @@
+---
+- hosts: control
+  tasks:
+    - shell: docker ps | awk 'FNR > 1 && $NF ~ /neutron/ {print $NF}' | tr '\n' ' '
+      register: neutron_containers
+    - command: docker restart {{neutron_containers.stdout}}

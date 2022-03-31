@@ -1,0 +1,22 @@
+<li>
+    {%  if config.is_planned() %}
+        <button onclick="location.href='deploy'">Deploy</button>
+        <button onclick="location.href='delete'">Delete</button>
+    {% endif %}
+    {% if config.is_deployed() %}
+        <button onclick="goTo('admin_openrc', {{ config.id }})">Admin-openrc</button>
+        <button onclick="goTo('run_experiment', {{ config.id }})">Run experiment</button>
+        <button onclick="location.href='requests'">See requests</button>
+        <button onclick="goTo('full_dump', {{ config.id }})">Download full dump</button>
+        <button onclick="goTo('redeploy', {{ config.id }})">Redeploy</button>
+        <button onclick="goTo('clean', {{ config.id }})">Clean</button>
+        <button onclick="goTo('destroy', {{ config.id }})">Destroy</button>
+    {% endif %}
+    {% if config.is_destroyed() %}
+        <button onclick="location.href='requests'">See requests</button>
+        <button onclick="goTo('full_dump', {{ config.id }})">Download full dump</button>
+        <button onclick="goTo('redeploy', {{ config.id }})">Redeploy</button>
+        <button onclick="goTo('delete', {{ config.id }})">Delete</button>
+    {% endif %}
+    <button onclick="goTo('test', {{ config.id }})">Test request delay</button>
+</li>
