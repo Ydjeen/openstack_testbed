@@ -1,5 +1,5 @@
 ---
-  ScenarioPlugin.complete_test_run:
+  ScenarioPlugin.NewDeploymentWorkload:
     -
       args:
         image_location: "http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img"
@@ -9,26 +9,27 @@
       runner:
         type: "constant_for_duration"
         concurrency: 1
-        duration: 5
-        timeout: 1000
+        duration: 600
+        timeout: 2000
       hooks:
         - name: fault_injection
           args:
             debug: true
             target:
-              target: "container"
-              host: "wally096.cit.tu-berlin.de"
-              id: "cbcc9552507d"
+              target: "network"
+              interface: "enp2s0"
+              host: "wally191.cit.tu-berlin.de"
             params:
-              delay: "2s"
-              duration: "11s"
-              stressors: "--cpu 8"
-            anomaly: "stress-ng"
+              delay: "120s"
+              duration: "300s"
+              tcconfig: "-loss 30%"
+            anomaly: "tc"
             config:
               ansible:
+                ansible_python_interpreter: "/usr/bin/python3"
                 ansible_user: "yevhen"
                 private_key_file: "~/.ssh/id_rsa"
-              hosts: ["wally096.cit.tu-berlin.de"]
+              hosts: [node_list]
           trigger:
             name: event
             args:

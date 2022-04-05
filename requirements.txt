@@ -151,4 +151,8 @@ WebOb==1.8.7
 websocket-client==1.1.1
 wrapt==1.12.1
 yaql==2.0.0
-elasticsearch
+elasticsearch==5.5.3
+gunicorn
+flask
+flask_sqlalchemy
+flask_restful
