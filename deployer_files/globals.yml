@@ -1,7 +1,7 @@
 ---
 
 kolla_base_distro: "ubuntu"
-node_custom_config: "/etc/kolla/config"
+node_custom_config: "[config_dir]"
 kolla_internal_vip_address: "[control_ip]"
 network_interface: "enp2s0"
 neutron_external_interface: "eno1"

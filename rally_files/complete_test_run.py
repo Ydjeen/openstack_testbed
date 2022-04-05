@@ -451,7 +451,6 @@ class NewDeploymentWorkload(KeystoneBasic, GlanceBasic, NeutronScenario, NovaSce
             self.create_sequence()
         except Exception as e:
             self.clean_sequence()
-            raise ValueError(self.floating_ip)
         self.delete_sequence()
 
     def init_params(self):
@@ -517,13 +516,13 @@ class NewDeploymentWorkload(KeystoneBasic, GlanceBasic, NeutronScenario, NovaSce
 
         create_volume_params = None or {}
         self.size = {'min': 1, 'max': 3}
-        #self.volume = self.cinder.create_volume(self.size, **create_volume_params)
+        self.volume = self.cinder.create_volume(self.size, **create_volume_params)
         self.step = self.step + 1
-        #self._attach_volume(self.server, self.volume)
+        self._attach_volume(self.server, self.volume)
         self.step = self.step + 1
-        #self._detach_volume(self.server, self.volume)
+        self._detach_volume(self.server, self.volume)
         self.step = self.step - 1
-        #self.cinder.delete_volume(self.volume)
+        self.cinder.delete_volume(self.volume)
         self.step = self.step - 1
 
         self._pause_server(self.server)

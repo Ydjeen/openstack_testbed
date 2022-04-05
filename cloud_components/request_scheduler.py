@@ -24,6 +24,7 @@ class RequestScheduler:
 
     def get_queued_requests(self):
         return RequestExecutor.query.filter(RequestExecutor.request_end == None) \
+            .filter(RequestExecutor.deploy_id == self.deploy_id) \
             .order_by(RequestExecutor.request_time) \
             .all()
 
@@ -58,14 +59,17 @@ class RequestScheduler:
             .filter(RequestExecutor.request_end == None) \
             .order_by(RequestExecutor.request_time) \
             .first()
-        while current_request:
-            self.__current_request_id__ = current_request.id
-            current_request.execute()
-            current_request = RequestExecutor.query \
-                .filter(RequestExecutor.deploy_id == self.deploy_id) \
-                .filter(RequestExecutor.request_end == None) \
-                .order_by(RequestExecutor.request_time) \
-                .first()
+        try:
+            while current_request:
+                self.__current_request_id__ = current_request.id
+                current_request.execute()
+                current_request = RequestExecutor.query \
+                    .filter(RequestExecutor.deploy_id == self.deploy_id) \
+                    .filter(RequestExecutor.request_end == None) \
+                    .order_by(RequestExecutor.request_time) \
+                    .first()
+                self.__current_request_id__ = None
+        finally:
             self.__current_request_id__ = None
         self.__executing_lock__.acquire()
         self.__executing__ = False

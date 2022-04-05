@@ -21,6 +21,7 @@ STR_CONTROL_IDS = "[control_ids]"
 STR_MONITORING_IDS = "[monitoring_ids]"
 STR_COMPUTE_IDS = "[compute_ids]"
 STR_CONTROL_IP = "[control_ip]"
+STR_CONFIG_DIR = "[config_dir]"
 
 FILE_GLOBALS = "globals.yml"
 FILE_MULTINODE = "multinode"
@@ -56,7 +57,9 @@ def prepare_config_files(deploy_id):
                     f"{deploy_folder}globals.yml")
     with fileinput.FileInput(f"{deploy_folder}globals.yml", inplace=True) as file:
         for line in file:
-            print(line.replace(STR_CONTROL_IP, deploy.get_control_node().ip), end='')
+            to_print = line.replace(STR_CONTROL_IP, deploy.get_control_node().ip)
+            to_print = to_print.replace(STR_CONFIG_DIR, f'{os.getcwd()}/custom_config')
+            print(to_print, end='')
     shutil.copyfile(f"{DEPLOYER_FILES_FOLDER}/passwords.yml", f"{deploy_folder}passwords.yml")
     subprocess.run(["kolla-genpwd", "-p", f"{deploy_folder}passwords.yml"])
     shutil.copyfile(f"{DEPLOYER_FILES_FOLDER}/{FILE_BOOTSTRAP}", f"{deploy_folder}{FILE_BOOTSTRAP}")
@@ -179,10 +182,12 @@ def clear_openstack(config_id):
     try:
         for server in connection.list_servers():
             connection.delete_server(server.__getitem__('id'))
-        for port in connection.list_ports():
-            connection.delete_port(port.id)
+        for volume in connection.list_volumes():
+            connection.delete_volume(volume.name)
         for floating_ip in connection.list_floating_ips():
             connection.delete_floating_ip(floating_ip.id)
+        for port in connection.list_ports():
+            connection.delete_port(port.id)
         for router in connection.list_routers():
             connection.delete_router(router.id)
         for subnet in connection.list_subnets():

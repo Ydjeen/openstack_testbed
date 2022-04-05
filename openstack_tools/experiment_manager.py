@@ -142,6 +142,6 @@ class ExperimentManager:
                                           end_time])
         metrics_collector = MetricsCollector(self.deployment_id, self.request_name, load_name, start_time,
                                           end_time)
-        #metrics_collector.extract_metrics()
-        #self.extract_openstack_logs(load_name)
+        metrics_collector.extract_metrics()
+        self.extract_openstack_logs(load_name)
         return True

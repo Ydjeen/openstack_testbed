@@ -171,8 +171,7 @@ def extract_traces(deployment_id, request_name, load_name):
                 for iteration in workload['data']:
                     for complete in iteration['output']['complete']:
                         traces.append(complete['data']['trace_id'])
-    depl = Deployment.load(deployment_id);
-    sys.stdin
+    depl = Deployment.load(deployment_id)
     for trace in traces:
         html_output_file = open(f"{html_folder}/{trace}.html", "a+")
         subprocess.run(["osprofiler", "trace", "show", "--html", trace, "--connection-string",
