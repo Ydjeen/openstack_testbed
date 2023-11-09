@@ -1,14 +1,14 @@
 # Prepearing environment
-* Access to wally nodes is defined in [multinode](deployer_files/multinode) file in `[all:vars]` section
-* Wally nodes need 2 network interfaces defined in [globals.yml](deployer_files/globals.yml). 
+* Access to nodes is defined in [multinode](deployer_files/multinode) file in `[all:vars]` section
+* Potential cloud nodes need 2 network interfaces defined in [globals.yml](deployer_files/globals.yml). 
   *By default these are `enp2s0` as network interface and `eno1` as cluster interface
 
 # Prepearing project folder
 * Clone the repository
 
 ```
-git clone git@gitlab.tubit.tu-berlin.de:ydjeen/kolla_rest_api.git
-cd kolla_rest_api
+git clone git@github.com:Ydjeen/openstack_testbed.git
+cd openstack_testbed
 ```
 * Make sure pip and npm are installed.
 * Prepare virtual environment and activate it
@@ -35,9 +35,14 @@ npm install elasticdump
 ```
 FLASK_APP=app.py flask run -p 5001 --host=0.0.0.0
 ```
+* Using gunicorn
+```
+gunicorn --log-file log --capture-output -w 1 app:app -b 0.0.0.0:5001 -t 4000 --daemon
+```
+
 * Access it via `127.0.0.1:5001`
 
-# API description
+#obsolete REST API description
 * Deploy a new config using POST request on `/configs/` URL
   * Control node is specified as `control` parameter
   * Compute nodes are specified as `compute` parameter
@@ -62,11 +67,11 @@ curl wally096.cit.tu-berlin.de:5001/configs/1/ -X DELETE -v
 ```
 
 # Post deployment
-* Everything that has to do with deployment is located in `deploy_list/deployment{config_id}` folder
+* Everything that has to do with deployed cloud is located in `deploy_list/deployment{config_id}` folder
 
 # Troubleshooting
 
-* If wally does not have `eno1` interface a possible solution might be to use netplan:
+* If a node does not have `eno1` interface a possible solution might be to use netplan:
   * Add eno1 interface to `/etc/netplan/01-netcfg.yaml` file
 
 ```
