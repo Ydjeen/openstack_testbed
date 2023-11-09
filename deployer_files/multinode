@@ -1,6 +1,6 @@
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3
-ansible_user=yevhen
+ansible_user=root #change user name for root access
 ansible_become=True
 ansible_private_key_file={{lookup('env','HOME')}}/.ssh/id_rsa
 
