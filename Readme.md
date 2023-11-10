@@ -55,6 +55,8 @@ npm install elasticdump
 }
 ```
 
+* Set your ssh crenedtials to this nodes in deployer_files/multinode as ansible_user and ansible_private_key_file fields.
+
 # Run flask application
 
 * Using built-in functionality
