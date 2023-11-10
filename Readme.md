@@ -17,7 +17,14 @@ cd openstack_testbed
 python3 -m venv ./venv
 source ./activate
 ```
-* Install required pip packages
+* Clone to a separate folder [openstack_anomaly_injection](https://github.com/Ydjeen/openstack_anomaly_injection) package
+
+* Install it, by navigating to openstack_anomaly_injection/ folder, which includes setup.py file and executing
+```
+python setup.py install
+```
+
+* Go back to openstack_testbed project folder and install required pip packages
 
 ```
 pip install -r requirements.txt
