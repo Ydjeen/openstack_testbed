@@ -93,8 +93,3 @@ network:
       addresses: [192.168.101.122/24]
 ```
   * Apply changes via `sudo netplan apply`
-
-
-### TODO
-update openstack_anomaly_injection plugin path in openstack_tools/rally_manager.py
-use a proper ssh key in config files
