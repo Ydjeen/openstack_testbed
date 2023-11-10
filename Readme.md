@@ -34,6 +34,26 @@ pip install -r requirements.txt
 ```
 npm install elasticdump
 ```
+* Create a node_list txt file in the root folder
+* Specify machines in it, that are planned to be used for cloud deployments as a json, with an array "node_list" of objects with the following properties: "name", "domain_name", "ip". Example:
+
+
+```
+{
+    "node_list" : [
+        {
+            "name" : "node0",
+             "domain_name" : "node1.some_org.de",
+             "ip" : "192.168.1.5"
+        },
+        {
+            "name" : "node1",
+             "domain_name" : "node2.some_org.de",
+             "ip" : "192.168.1.6"
+        }
+   ]
+}
+```
 
 # Run flask application
 
